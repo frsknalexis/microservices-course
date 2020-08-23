@@ -48,8 +48,8 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
-    public AlumnoDTO update(AlumnoDTO alumno) {
-        return alumnoRepository.findById(alumno.getAlumnoId())
+    public AlumnoDTO update(AlumnoDTO alumno, Integer alumnoId) {
+        return alumnoRepository.findById(alumnoId)
                 .map(alumnoEntity -> {
                     alumnoEntity.setNombre(alumno.getNombre());
                     alumnoEntity.setApellido(alumno.getApellido());

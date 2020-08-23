@@ -1,4 +1,4 @@
-package com.dev.microservices.core.users.model.entity;
+package com.dev.microservices.courses.entity;
 
 import lombok.*;
 

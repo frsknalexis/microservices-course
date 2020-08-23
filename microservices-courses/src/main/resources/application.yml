@@ -1,0 +1,31 @@
+#SPRING CONFIGURATION
+spring:
+  application:
+    name: microservices-courses
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_cursos?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: dev_guty
+    password: devuser2019$$
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081
+
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: debug
+
+
+#EUREKA CLIENT CONFIGURATION
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.value}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

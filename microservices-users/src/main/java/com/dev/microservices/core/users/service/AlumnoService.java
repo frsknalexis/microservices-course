@@ -13,7 +13,7 @@ public interface AlumnoService {
 
     AlumnoDTO save(AlumnoDTO alumno);
 
-    AlumnoDTO update(AlumnoDTO alumno);
+    AlumnoDTO update(AlumnoDTO alumno, Integer alumnoId);
 
     void deleteById(Integer alumnoId);
 }

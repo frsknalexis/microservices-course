@@ -70,7 +70,7 @@ public class AlumnoController {
             throw new NotFoundException(errorMessage);
         }
 
-        AlumnoDTO alumnoResponse = alumnoService.update(alumnoDTO);
+        AlumnoDTO alumnoResponse = alumnoService.update(alumnoDTO, alumnoId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(alumnoResponse);
