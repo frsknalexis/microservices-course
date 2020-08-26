@@ -1,4 +1,4 @@
-package com.dev.microservices.core.users.model.dto;
+package com.dev.microservices.core.users.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AlumnoDTO implements Serializable {
-
-    private Integer alumnoId;
+public class AlumnoRequest implements Serializable {
 
     private String nombre;
 

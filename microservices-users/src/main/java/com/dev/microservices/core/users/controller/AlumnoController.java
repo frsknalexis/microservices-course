@@ -1,7 +1,8 @@
 package com.dev.microservices.core.users.controller;
 
 import com.dev.microservices.core.users.exception.NotFoundException;
-import com.dev.microservices.core.users.model.dto.AlumnoDTO;
+import com.dev.microservices.core.users.model.request.AlumnoRequest;
+import com.dev.microservices.core.users.model.response.AlumnoResponse;
 import com.dev.microservices.core.users.service.AlumnoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,8 +25,8 @@ public class AlumnoController {
     }
 
     @GetMapping(value = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<List<AlumnoDTO>> findAll() throws NotFoundException {
-        List<AlumnoDTO> alumnosResponse = Optional.ofNullable(alumnoService.findAll())
+    public ResponseEntity<List<AlumnoResponse>> findAll() throws NotFoundException {
+        List<AlumnoResponse> alumnosResponse = Optional.ofNullable(alumnoService.findAll())
                 .orElseThrow(() -> {
                     String errorMessage = "No se encontraron resultados";
                     return new NotFoundException(errorMessage);
@@ -37,9 +38,9 @@ public class AlumnoController {
     }
 
     @GetMapping(value = "/{alumnoId}", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<AlumnoDTO> findByAlumnoId(@PathVariable(value = "alumnoId") Integer alumnoId)
+    public ResponseEntity<AlumnoResponse> findByAlumnoId(@PathVariable(value = "alumnoId") Integer alumnoId)
             throws NotFoundException {
-        AlumnoDTO alumnoResponse = Optional.ofNullable(alumnoService.findById(alumnoId))
+        AlumnoResponse alumnoResponse = Optional.ofNullable(alumnoService.findById(alumnoId))
                 .orElseThrow(() -> {
                     String errorMessage = String.format("No se encontro ningun alumno con ID %s", alumnoId);
                     return new NotFoundException(errorMessage);
@@ -52,25 +53,25 @@ public class AlumnoController {
 
     @PostMapping(value = "/inserta", consumes = { MediaType.APPLICATION_JSON_VALUE },
         produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<AlumnoDTO> crear(@RequestBody AlumnoDTO alumnoDTO) {
-        AlumnoDTO alumnoResponse = alumnoService.save(alumnoDTO);
+    public ResponseEntity<AlumnoResponse> crear(@RequestBody AlumnoRequest alumnoRequest) {
+        AlumnoResponse alumnoResponse = alumnoService.save(alumnoRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(alumnoResponse);
     }
 
     @PutMapping(value = "/modifica/{alumnoId}")
-    public ResponseEntity<AlumnoDTO> modifica(@PathVariable(value = "alumnoId") Integer alumnoId,
-        @RequestBody AlumnoDTO alumnoDTO) throws NotFoundException {
+    public ResponseEntity<AlumnoResponse> modifica(@PathVariable(value = "alumnoId") Integer alumnoId,
+       @RequestBody AlumnoRequest alumnoRequest) throws NotFoundException {
 
-        AlumnoDTO alumno = alumnoService.findById(alumnoId);
+        AlumnoResponse alumno = alumnoService.findById(alumnoId);
 
         if (alumno == null) {
             String errorMessage = String.format("No se encontro ningun alumno con ID %s", alumnoId);
             throw new NotFoundException(errorMessage);
         }
 
-        AlumnoDTO alumnoResponse = alumnoService.update(alumnoDTO, alumnoId);
+        AlumnoResponse alumnoResponse = alumnoService.update(alumnoRequest, alumnoId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(alumnoResponse);
@@ -79,7 +80,7 @@ public class AlumnoController {
     @DeleteMapping(value = "/elimina/{alumnoId}")
     public ResponseEntity<?> eliminaPorAlumnoId(@PathVariable(value = "alumnoId") Integer alumnoId)
             throws NotFoundException {
-        AlumnoDTO alumnoResponse = Optional.ofNullable(alumnoService.findById(alumnoId))
+        AlumnoResponse alumnoResponse = Optional.ofNullable(alumnoService.findById(alumnoId))
                 .orElseThrow(() -> {
                     String errorMessage = String.format("No se encontro ningun alumno con ID %s", alumnoId);
                     return new NotFoundException(errorMessage);
@@ -87,5 +88,14 @@ public class AlumnoController {
 
         alumnoService.deleteById(alumnoResponse.getAlumnoId());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/filtrar/{termino}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<List<AlumnoResponse>> filtrarAlumnoByNombreOrApellido(@PathVariable(value = "termino")
+        String termino) {
+        List<AlumnoResponse> alumnosResponse = alumnoService.findByNombreOrApellido(termino);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(alumnosResponse);
     }
 }

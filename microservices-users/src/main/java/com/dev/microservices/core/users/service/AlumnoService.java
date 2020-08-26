@@ -1,19 +1,21 @@
 package com.dev.microservices.core.users.service;
 
-import com.dev.microservices.core.users.model.dto.AlumnoDTO;
-import com.dev.microservices.core.users.model.entity.Alumno;
+import com.dev.microservices.core.users.model.request.AlumnoRequest;
+import com.dev.microservices.core.users.model.response.AlumnoResponse;
 
 import java.util.List;
 
 public interface AlumnoService {
 
-    List<AlumnoDTO> findAll();
+    List<AlumnoResponse> findAll();
 
-    AlumnoDTO findById(Integer alumnoId);
+    AlumnoResponse findById(Integer alumnoId);
 
-    AlumnoDTO save(AlumnoDTO alumno);
+    AlumnoResponse save(AlumnoRequest alumno);
 
-    AlumnoDTO update(AlumnoDTO alumno, Integer alumnoId);
+    AlumnoResponse update(AlumnoRequest alumno, Integer alumnoId);
 
     void deleteById(Integer alumnoId);
+
+    List<AlumnoResponse> findByNombreOrApellido(String termino);
 }

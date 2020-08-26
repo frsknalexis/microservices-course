@@ -1,7 +1,8 @@
 package com.dev.microservices.core.users.processor;
 
-import com.dev.microservices.core.users.model.dto.AlumnoDTO;
+import com.dev.microservices.core.users.model.request.AlumnoRequest;
 import com.dev.microservices.core.users.model.entity.Alumno;
+import com.dev.microservices.core.users.model.response.AlumnoResponse;
 import com.dev.microservices.core.users.util.DateUtils;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +12,8 @@ import java.util.stream.Collectors;
 @Component
 public class AlumnoProcessor {
 
-    public AlumnoDTO convertToAlumnoDTO(Alumno alumno) {
-        return AlumnoDTO.builder()
+    public AlumnoResponse buildAlumnoResponse(Alumno alumno) {
+        return AlumnoResponse.builder()
                 .alumnoId(alumno.getAlumnoId())
                 .nombre(alumno.getNombre())
                 .apellido(alumno.getApellido())
@@ -21,19 +22,18 @@ public class AlumnoProcessor {
                 .build();
     }
 
-    public List<AlumnoDTO> convertToListAlumnoDTO(List<Alumno> alumnos) {
+    public List<AlumnoResponse> buildListAlumnoResponse(List<Alumno> alumnos) {
         return alumnos.stream()
-                .map(this::convertToAlumnoDTO)
+                .map(this::buildAlumnoResponse)
                 .collect(Collectors.toList());
     }
 
-    public Alumno convertToAlumnoEntity(AlumnoDTO alumnoDTO) {
+    public Alumno buildAlumnoRequestToEntity(AlumnoRequest alumnoRequest) {
         return Alumno.builder()
-                .alumnoId(alumnoDTO.getAlumnoId())
-                .nombre(alumnoDTO.getNombre())
-                .apellido(alumnoDTO.getApellido())
-                .email(alumnoDTO.getEmail())
-                .fechaRegistro(DateUtils.stringToDate(alumnoDTO.getFechaRegistro()))
+                .nombre(alumnoRequest.getNombre())
+                .apellido(alumnoRequest.getApellido())
+                .email(alumnoRequest.getEmail())
+                .fechaRegistro(DateUtils.stringToDate(alumnoRequest.getFechaRegistro()))
                 .build();
     }
 }

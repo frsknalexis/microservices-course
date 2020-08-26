@@ -24,4 +24,6 @@ public interface CursoService {
 
     CursoResponse removeAlumnoToCourse(AlumnoRequest alumnoRequest, Integer cursoId)
        throws NotFoundException;
+
+    CursoResponse findCursoByAlumnoId(Integer alumnoId) throws NotFoundException;
 }

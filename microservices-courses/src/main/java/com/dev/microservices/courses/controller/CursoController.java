@@ -4,6 +4,8 @@ import com.dev.microservices.courses.exception.NotFoundException;
 import com.dev.microservices.courses.model.request.AlumnoRequest;
 import com.dev.microservices.courses.model.request.CursoRequest;
 import com.dev.microservices.courses.model.response.CursoResponse;
+import com.dev.microservices.courses.payload.AlumnoPayload;
+import com.dev.microservices.courses.payload.AlumnosPayload;
 import com.dev.microservices.courses.service.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -92,19 +94,28 @@ public class CursoController {
 
     @PutMapping(value = "/{cursoId}/addAlumnos", produces = { MediaType.APPLICATION_JSON_VALUE },
         consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<CursoResponse> addAlumnoToCourse(@RequestBody List<AlumnoRequest> alumnoRequests,
+    public ResponseEntity<CursoResponse> addAlumnoToCourse(@RequestBody AlumnosPayload alumnoRequests,
         @PathVariable(value = "cursoId") Integer cursoId) throws NotFoundException {
-        CursoResponse cursoResponse = cursoService.addAlumnoToCourse(alumnoRequests, cursoId);
+        CursoResponse cursoResponse = cursoService.addAlumnoToCourse(alumnoRequests.getAlumnos(), cursoId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(cursoResponse);
     }
 
     @PutMapping(value = "/{cursoId}/removeAlumno")
-    public ResponseEntity<CursoResponse> removeAlumnoToCourse(@RequestBody AlumnoRequest alumnoRequest,
+    public ResponseEntity<CursoResponse> removeAlumnoToCourse(@RequestBody AlumnoPayload alumnoRequest,
         @PathVariable(value = "cursoId") Integer cursoId) throws NotFoundException {
-        CursoResponse cursoResponse = cursoService.removeAlumnoToCourse(alumnoRequest, cursoId);
+        CursoResponse cursoResponse = cursoService.removeAlumnoToCourse(alumnoRequest.getAlumno(), cursoId);
         return ResponseEntity.status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(cursoResponse);
+    }
+
+    @GetMapping(value = "/alumno/{alumnoId}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<CursoResponse> findCursoByAlumnoId(@PathVariable(value = "alumnoId") Integer alumnoId)
+        throws NotFoundException {
+        CursoResponse cursoResponse = cursoService.findCursoByAlumnoId(alumnoId);
+        return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(cursoResponse);
     }

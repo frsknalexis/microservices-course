@@ -103,4 +103,14 @@ public class CursoServiceImpl implements CursoService {
         cursoResponse.setAlumnos(alumnosEntity);
         return cursoProcessor.buildCursoResponse(cursoRepository.save(cursoResponse));
     }
+
+    @Override
+    public CursoResponse findCursoByAlumnoId(Integer alumnoId) throws NotFoundException {
+        return Optional.ofNullable(cursoRepository.findCursoByAlumnoId(alumnoId))
+                .map(cursoProcessor::buildCursoResponse)
+                .orElseThrow(() -> {
+                    String errorMessage = String.format("No se encontro ningun alumno con ID %s", alumnoId);
+                   return new NotFoundException(errorMessage);
+                });
+    }
 }
